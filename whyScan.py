@@ -18,7 +18,7 @@ import asyncio
 from telegram import Bot
 import re
 
-
+# Function to send a message via the Telegram bot
 async def send_message_via_bot(token, chat_id, message):
     bot = Bot(token=token)
     await bot.send_message(chat_id=chat_id, text=message)
@@ -29,13 +29,14 @@ from telegram import Bot
 
 # OPEN API KEY HERE
 
-
-
 # Create a Bot instance
-
-CHAT_ID = "-1002351117426"#"-4670327852"#"-1002274400390"  # Replace with your chat ID
+BOT_TOKEN = "8116421461:AAHXwr7YPiktp-wYvsWVbv7ZoPDvq8GtRTA"# os.environ["BOT_TOKEN"]
+CHAT_ID = "-1002351117426"# Replace with your chat ID
 CHATCTO_ID = "-1002351117426"  # Replace with your chat ID
 
+#IDENTITY HERE
+IDENTITY = "Your name is retired_chad_bot, You are a financial analyst in a group called retirement coin, youre really hype and cool and like participating in raiding social media posts. It's about retirement coin, generate a response, don't usehashtags, youre respoding in chat."
+respondEX = r'\b(retired_chad_bot|chad)(?=\s|[.!?,]|$)'
 
 bot = Bot(token=BOT_TOKEN) 
 
@@ -108,7 +109,7 @@ last_update_id = 0
 
 
 def answer(question):
-    """Respond as retirechad."""
+    """Respond as identity."""
     prompt = f"""
      {question}.
     
@@ -121,7 +122,7 @@ def answer(question):
         completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "developer", "content": "Your name is retired_chad_bot, You are a financial analyst in a group called retirement coin, youre really hype and cool and like participating in raiding social media posts. It's about retirement coin, generate a response, don't usehashtags, youre respoding in chat."},
+                {"role": "developer", "content": IDENTITY},
                 {
                     "role": "user",
                     "content": prompt
@@ -143,48 +144,28 @@ async def get_chat_messages(chat_id):
     messagesA = []
     updates = []
     try:
-        #print("getting updates")
-        updates = await fetch_updates()
-        #print(updates)
-        #print("ALL THE MESSAGES")
-        for update in updates:
-            #print("NEWUPDATE")
-            said = extract_text_from_update(update)
-            print("Depth", said)
-            said = said.replace("'", r"\'")
-            messageID = update.message.message_id
-            #print(messageID, said)
-            
-            if messageID > last_update_id:
-                #print("NEW MESSAGE")
-                if said and last_update_id != 0:
-                    messagesA.append(said)
-                    #print("added")
-                #print(said, messageID, last_update_id)
 
-        #print("END OF MESSAGES")
+        updates = await fetch_updates()
+
+        for update in updates:
+            
+            said = extract_text_from_update(update)
+            print(said)
+            messagesA.append(said)
+
         
         last_update_id = messageID
-        #print("LASTID", last_update_id)
+
         return messagesA
 
     except Exception as e:
         return f"Error getting messages: {e}"
         
-    #    if update.message and update.message.chat_id == chat_id:
-
-    #        message_text = update.message.text
-
-    #        print(f"Message from chat {chat_id}: {message_text}") 
-
-
-
-
     
 async def main():
     global offsetV
-    #await send_message_via_bot(BOT_TOKEN, CHAT_ID, "INIT")
-    #await asyncio.sleep(1)
+    global respondEX
+
     offsetV = await get_latest_offset()
 
     while True:
@@ -194,7 +175,7 @@ async def main():
         for m in messagesin:
             m = m.replace("'", r"\'")
             mlow = m.lower()
-            if re.search(r'\b(retired_chad_bot|chad)(?=\s|[.!?,]|$)', mlow):
+            if re.search(respondEX, mlow):
                 print("asking",m)
                 chadSays = answer(m)
                 print("will say", chadSays)
@@ -206,11 +187,7 @@ async def main():
 
         print("Sleeping.")
 
-        await asyncio.sleep(2)  # Use asyncio.sleep instead of time.sleep
-
-    #asyncio.run(send_message_via_bot(BOT_TOKEN, CHAT_ID, crypto_statement))
-    #time.sleep(1)
-    #asyncio.run(send_message_via_bot(BOT_TOKEN, CHATCTO_ID, crypto_statement))
+        await asyncio.sleep(2) 
         
 
 if __name__ == "__main__":
@@ -219,6 +196,3 @@ if __name__ == "__main__":
         loop.run_until_complete(main())
     except KeyboardInterrupt:
         print("Bot stopped.")
-    
-    
-#7858647961:AAGTSFYjCBEhkUhNlpkBFAwNtCLynjQ2_W8
