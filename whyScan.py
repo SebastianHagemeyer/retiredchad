@@ -32,7 +32,7 @@ from telegram import Bot
 
 
 # Create a Bot instance
-BOT_TOKEN = "8116421461:AAHXwr7YPiktp-wYvsWVbv7ZoPDvq8GtRTA"# os.environ["BOT_TOKEN"]
+
 CHAT_ID = "-1002351117426"#"-4670327852"#"-1002274400390"  # Replace with your chat ID
 CHATCTO_ID = "-1002351117426"  # Replace with your chat ID
 
