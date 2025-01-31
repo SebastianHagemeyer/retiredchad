@@ -27,7 +27,9 @@ async def send_message_via_bot(token, chat_id, message):
 from telegram import Bot
 
 
-OPENAI_API_KEY = "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"
+# OPEN API KEY HERE
+
+
 
 # Create a Bot instance
 BOT_TOKEN = "8116421461:AAHXwr7YPiktp-wYvsWVbv7ZoPDvq8GtRTA"# os.environ["BOT_TOKEN"]
